@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Anjana & Rinu — Wedding Invitation</title>
+<link rel="icon" type="image/jpeg" href="favicon.jpg">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   ROOT & RESET
+═══════════════════════════════════════════ */
+:root {
+  --bg:         #0e0703;
+  --brown:      #382208;
+  --brown-dark: #261605;
+  --brown-deep: #1a0e03;
+  --gold:       #D4AF37;
+  --gold-lt:    #F2D675;
+  --gold-br:    #FFE066;
+  --gold-dim:   #A87C20;
+  --gold-pale:  #c49020;
+  
+  --page-w:     min(44vw, 420px); 
+  --page-h:     min(70vh, 580px);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body {
+  background: var(--bg);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'EB Garamond', serif;
+  overflow: hidden;
+  position: relative;
+  touch-action: manipulation;
+}
+
+#particles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.book-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: clamp(9px, 2vw, 11px);
+  letter-spacing: 4px;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  z-index: 10;
+  text-align: center;
+  animation: fadeDown 1s ease-out both;
+}
+@keyframes fadeDown {
+  from { opacity:0; transform:translateY(-12px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+.book-scene {
+  perspective: 2500px;
+  width: calc(var(--page-w) * 2 + 4px);
+  height: var(--page-h);
+  position: relative;
+  z-index: 10;
+  animation: bookReveal 1.4s cubic-bezier(.22,.61,.36,1) both;
+  margin: 0 auto;
+}
+@keyframes bookReveal {
+  from { opacity:0; transform:translateY(30px) rotateX(5deg); }
+  to   { opacity:1; transform:translateY(0) rotateX(0); }
+}
+
+.book-scene::after {
+  content:'';
+  position:absolute;
+  top:0; left:50%;
+  transform:translateX(-50%);
+  width:6px; height:100%;
+  background: linear-gradient(to right,
+    rgba(0,0,0,0.6) 0%,
+    rgba(212,175,55,0.15) 35%,
+    rgba(212,175,55,0.15) 65%,
+    rgba(0,0,0,0.6) 100%);
+  z-index:25;
+  pointer-events:none;
+}
+
+.page {
+  position: absolute;
+  width: var(--page-w);
+  height: var(--page-h);
+  top: 0;
+  left: 50%;
+  transform-origin: left center;
+  transform-style: preserve-3d;
+  transition: transform 0.9s cubic-bezier(.645,.045,.355,1.000);
+  cursor: pointer;
+}
+
+.page.flipped {
+  transform: rotateY(-180deg);
+}
+
+.page-front, .page-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  background: var(--brown);
+  overflow: hidden;
+  border: 1px solid rgba(212,175,55,0.2);
+}
+
+.page-back {
+  transform: rotateY(180deg);
+}
+
+.page-front::before, .page-back::before {
+  content:'';
+  position:absolute;
+  inset:6px;
+  border:1px solid rgba(212,175,55,0.15);
+  pointer-events:none;
+  z-index:1;
+}
+
+.left-page {
+  position:absolute;
+  left:0; top:0;
+  width:var(--page-w);
+  height:var(--page-h);
+  background:var(--brown);
+  border:1px solid rgba(212,175,55,0.2);
+  overflow:hidden;
+  z-index:1;
+  box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+}
+.left-page::before {
+  content:'';
+  position:absolute;
+  inset:6px;
+  border:1px solid rgba(212,175,55,0.15);
+  pointer-events:none;
+  z-index:1;
+}
+
+.page-content {
+  position:relative;
+  width:100%; height:100%;
+  z-index:2;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding: clamp(15px, 3vw, 25px);
+  text-align:center;
+}
+
+.nav-bar {
+  display:flex;
+  align-items:center;
+  gap: clamp(15px, 5vw, 30px);
+  margin-top: 25px;
+  z-index:10;
+}
+
+.nav-btn {
+  width: 44px; height: 44px;
+  border: 1px solid var(--gold-dim);
+  background: rgba(56, 34, 8, 0.9);
+  color: var(--gold);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+.nav-btn:hover:not(:disabled) { border-color: var(--gold); background: var(--brown-dark); }
+.nav-btn:active { transform: scale(0.9); }
+.nav-btn:disabled { opacity: 0.15; cursor: default; }
+
+.page-indicator {
+  font-family:'Cinzel',serif;
+  font-size: 10px;
+  letter-spacing:2px;
+  color:var(--gold-dim);
+}
+
+.cal-btn, .send-btn, .locate-btn {
+  margin-top: 15px;
+  padding: 8px 16px;
+  background: transparent;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: 0.3s;
+  z-index: 5;
+}
+.cal-btn:hover, .send-btn:hover, .locate-btn:hover { background: var(--gold); color: var(--brown-deep); }
+
+.input-field {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--gold-dim);
+  color: var(--gold-lt);
+  padding: 10px;
+  width: 80%;
+  margin: 5px 0;
+  font-family: 'EB Garamond', serif;
+  outline: none;
+  font-size: 14px;
+}
+.input-field::placeholder { color: rgba(212, 175, 55, 0.4); }
+
+.pg-name-lg {
+  font-family:'Cinzel Decorative',serif;
+  font-size: clamp(18px, 4.5vw, 26px);
+  color:var(--gold);
+  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  margin: 5px 0;
+}
+.pg-name-md {
+  font-family:'Cinzel Decorative',serif;
+  font-size: clamp(14px, 3.5vw, 18px);
+  color:var(--gold);
+}
+.pg-label {
+  font-family:'Cinzel',serif;
+  font-size: clamp(7px, 2vw, 9px);
+  letter-spacing: 3px;
+  color: var(--gold-dim);
+}
+.pg-body {
+  font-size: clamp(10px, 2.8vw, 12.5px);
+  color:var(--gold-lt);
+  line-height: 1.6;
+}
+.pg-date-num {
+  font-family:'Cinzel',serif;
+  font-size: clamp(32px, 10vw, 52px);
+  color:var(--gold);
+}
+
+@media (max-width: 600px) {
+  .book-scene { transform: scale(1.05); }
+}
+</style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<div class="book-title">✦ &nbsp; Wedding Invitation &nbsp; ✦</div>
+
+<div class="book-scene" id="bookScene">
+  <div class="left-page" id="leftPage"></div>
+  
+  <div class="page" id="page1" style="z-index:15;"><div class="page-front" id="p1front"></div><div class="page-back" id="p1back"></div></div>
+  <div class="page" id="page2" style="z-index:14;"><div class="page-front" id="p2front"></div><div class="page-back" id="p2back"></div></div>
+  <div class="page" id="page3" style="z-index:13;"><div class="page-front" id="p3front"></div><div class="page-back" id="p3back"></div></div>
+  <div class="page" id="page4" style="z-index:12;"><div class="page-front" id="p4front"></div><div class="page-back" id="p4back"></div></div>
+  <div class="page" id="page5" style="z-index:11;"><div class="page-front" id="p5front"></div><div class="page-back" id="p5back"></div></div>
+  <div class="page" id="page6" style="z-index:10;"><div class="page-front" id="p6front"></div><div class="page-back" id="p6back"></div></div>
+</div>
+
+<div class="nav-bar">
+  <button class="nav-btn" id="prevBtn" disabled aria-label="Previous Page">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <path d="M15 18L9 12L15 6" stroke="#D4AF37" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+  <div class="page-indicator" id="pageIndicator">Cover</div>
+  <button class="nav-btn" id="nextBtn" aria-label="Next Page">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <path d="M9 18L15 12L9 6" stroke="#D4AF37" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+</div>
+
+<script>
+const SVG_OM = `<svg width="50" height="50" viewBox="0 0 58 58" style="margin-bottom:10px;"><text x="29" y="38" text-anchor="middle" font-size="28" fill="#D4AF37" font-family="serif">ॐ</text><circle cx="29" cy="29" r="26" stroke="#D4AF37" stroke-width="1" opacity="0.4"/></svg>`;
+
+function buildCover(el) {
+  el.innerHTML = `<div class="page-content" style="justify-content: flex-start; padding-top: 40px;">
+    ${SVG_OM}
+    <div class="pg-label" style="letter-spacing: 2px; margin-top: 50px;">WEDDING RECEPTION INVITATION</div>
+    <div style="width: 60%; height: 1px; background: linear-gradient(to right, transparent, var(--gold), transparent); margin: 20px 0 30px 0; opacity: 0.6;"></div>
+    <div class="pg-name-lg">Anjana</div>
+    <div class="pg-label">&amp;</div>
+    <div class="pg-name-lg">Rinu</div>
+    <div style="margin-top:15px;" class="pg-label">24 · JUNE · 2026</div>
+  </div>`;
+}
+
+function buildInside(el) {
+  el.innerHTML = `<div class="page-content">
+    <div class="pg-body" style="font-style:italic; opacity:0.8;">"With the blessings of the Almighty"</div>
+  </div>`;
+}
+
+function buildHosts(el) {
+  el.innerHTML = `<div class="page-content">
+    <div class="pg-label">With Joy</div>
+    <div class="pg-name-md" style="margin:10px 0;">Mr. P. Mohanan &<br>Mrs. Dhanya Mohan</div>
+    <div class="pg-body">invite you to the wedding reception of our daughter</div>
+  </div>`;
+}
+
+function buildBride(el) {
+  el.innerHTML = `<div class="page-content">
+    <div class="pg-label">The Bride</div>
+    <div class="pg-name-lg">Anjana Mohan</div>
+    <div class="pg-body" style="font-size: clamp(9px, 2.2vw, 10.5px); line-height: 1.4; opacity: 0.9; margin-bottom: 12px; margin-top: 10px;">
+      (Grand D/o. Late Appu Pulparambil & Late Lakshmi <br> 
+      and Late Damodharan Purathekattuparambil & Mrs. Shobana)
+    </div>
+    <div class="pg-body" style="border-top: 1px solid rgba(212,175,55,0.2); padding-top: 8px; font-style: italic;">
+      Pulparambil, Karanthur, Kunnamangalam
+    </div>
+  </div>`;
+}
+
+function buildGroom(el) {
+  el.innerHTML = `<div class="page-content">
+    <div class="pg-label">The Groom</div>
+    <div class="pg-name-lg">Rinu K</div>
+    <div class="pg-body" style="margin-bottom: 12px;">S/o Mr. Unni K & Mrs. Reeja Unni</div>
+    <div class="pg-body" style="border-top: 1px solid rgba(212,175,55,0.2); padding-top: 8px; font-style: italic;">
+      Kumaramangalath, Kolakooth, Chelambra
+    </div>
+  </div>`;
+}
+
+function buildEvent(el) {
+  el.innerHTML = `<div class="page-content">
+    <div class="pg-label">The Celebration</div>
+    <div class="pg-date-num">24</div>
+    <div class="pg-name-md">JUNE 2026</div>
+    <div class="pg-body" style="margin-top:10px;"><b>4:00 PM - 9:00 PM</b><br>Sreepadmam Auditorium<br>Kunnamangalam</div>
+  </div>`;
+}
+
+function buildSaveDate(el) {
+  const calLink = "https://www.google.com/calendar/render?action=TEMPLATE&text=Wedding+of+Anjana+and+Rinu&dates=20260624T103000Z/20260624T153000Z&details=You+are+invited+to+the+wedding+reception+of+Anjana+and+Rinu+at+Sreepadmam+Auditorium.&location=Sreepadmam+Auditorium,+Kunnamangalam&sf=true&output=xml";
+  el.innerHTML = `<div class="page-content">
+    <div class="pg-label">SAVE THE DATE</div>
+    <div class="pg-name-md" style="margin-top:10px;">JUNE 24, 2026</div>
+    <div class="pg-body" style="margin: 15px 0;">Kindly mark your calendar for our special day.</div>
+    <a href="${calLink}" target="_blank" class="cal-btn" onclick="event.stopPropagation();">ADD TO CALENDAR</a>
+  </div>`;
+}
+
+function buildVenue(el) {
+  el.innerHTML = `<div class="page-content">
+    <div class="pg-label">Location Map</div>
+    <div style="border:1px solid #D4AF37; padding:8px; margin:15px 0;">
+      <img src="https://cdn.nxtdev.xyz/files/image/Picsart_26-05-14_00-14-09-106.png" style="width:160px; height:160px; display:block;">
+    </div>
+    <div class="pg-body">Scan to Navigate</div>
+    <a href="https://go.nxtdev.xyz/NGyHDH" target="_blank" class="locate-btn" onclick="event.stopPropagation();">LOCATE BUTTON</a>
+  </div>`;
+}
+
+function buildPersonalized(el) {
+  el.innerHTML = `<div class="page-content">
+    <div class="pg-label">PERSONALIZED INVITE</div>
+    <div class="pg-body" style="margin-bottom:10px;">Get Your Personalized Invitation Card on Inbox</div>
+    <input type="text" id="userName" placeholder="Enter Your Name" class="input-field" onclick="event.stopPropagation();">
+    <input type="email" id="userEmail" placeholder="Enter Email ID" class="input-field" onclick="event.stopPropagation();">
+    <button id="sendBtn" class="send-btn" onclick="handleSend(event)">SEND NOW</button>
+    <div id="statusMsg" style="font-size:10px; margin-top:10px; color:var(--gold-lt);"></div>
+  </div>`;
+}
+
+async function handleSend(e) {
+  e.stopPropagation();
+  const name = document.getElementById('userName').value;
+  const email = document.getElementById('userEmail').value;
+  const status = document.getElementById('statusMsg');
+  const btn = document.getElementById('sendBtn');
+
+  if (!name || !email) { status.innerText = "Please fill all fields."; return; }
+  
+  btn.innerText = "SENDING..."; btn.disabled = true;
+
+  try {
+    const res = await fetch('/api/invitation', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email })
+    });
+    if (res.ok) { status.innerText = "Sent Successfully! Check your inbox."; btn.innerText = "SENT ✅"; }
+    else { throw new Error(); }
+  } catch {
+    status.innerText = "Failed to send. Please try again.";
+    btn.innerText = "SEND NOW"; btn.disabled = false;
+  }
+}
+
+function buildClosing(el) {
+  el.innerHTML = `<div class="page-content">
+    <div class="pg-body">Your presence is our greatest gift.</div>
+    <div class="pg-body" style="font-size: 10px; color: var(--gold-dim); margin-top: 5px; font-style: italic; cursor: pointer;" onclick="flipNext()">
+      (For Personalized Invitation Click here)
+    </div>
+    <div class="pg-label" style="margin-top:15px;">With Regards</div>
+    <div class="pg-name-md">Arun Mohan & Family</div>
+  </div>`;
+}
+
+/* ─── STATE ENGINE ─── */
+const SPREADS = [
+  [buildInside, buildCover,        'Cover'],
+  [buildInside, buildHosts,        'Invitation'],
+  [buildBride,  buildGroom,        'The Couple'],
+  [buildEvent,  buildSaveDate,     'Save The Date'],
+  [buildVenue,  buildClosing,      'With Regards'],
+  [buildInside, buildPersonalized, 'Get Personalized']
+];
+
+let currentSpread = 0;
+const pages = [
+  document.getElementById('page1'), 
+  document.getElementById('page2'), 
+  document.getElementById('page3'), 
+  document.getElementById('page4'), 
+  document.getElementById('page5'),
+  document.getElementById('page6')
+];
+const pFronts = [
+  document.getElementById('p1front'), 
+  document.getElementById('p2front'), 
+  document.getElementById('p3front'), 
+  document.getElementById('p4front'), 
+  document.getElementById('p5front'),
+  document.getElementById('p6front')
+];
+const pBacks = [
+  document.getElementById('p1back'), 
+  document.getElementById('p2back'), 
+  document.getElementById('p3back'), 
+  document.getElementById('p4back'), 
+  document.getElementById('p5back'),
+  document.getElementById('p6back')
+];
+const leftPage = document.getElementById('leftPage');
+const indicator = document.getElementById('pageIndicator');
+
+function renderSpread(idx) {
+  leftPage.innerHTML = '';
+  if (SPREADS[idx][0]) SPREADS[idx][0](leftPage);
+
+  pages.forEach((p, i) => {
+    p.classList.remove('flipped');
+    p.style.zIndex = 15 - i;
+    pFronts[i].innerHTML = '';
+    pBacks[i].innerHTML = '';
+  });
+
+  if (SPREADS[idx][1]) SPREADS[idx][1](pFronts[0]);
+
+  if (idx + 1 < SPREADS.length) {
+    if (SPREADS[idx+1][1]) SPREADS[idx+1][1](pBacks[0]);
+    if (SPREADS[idx+1][0]) SPREADS[idx+1][0](pFronts[1]);
+  }
+
+  indicator.textContent = SPREADS[idx][2];
+  document.getElementById('prevBtn').disabled = idx === 0;
+  document.getElementById('nextBtn').disabled = idx >= SPREADS.length - 1;
+}
+
+function flipNext() {
+  if (currentSpread >= SPREADS.length - 1) return;
+  pages[0].classList.add('flipped');
+  setTimeout(() => { currentSpread++; renderSpread(currentSpread); }, 500);
+}
+
+function flipPrev() {
+  if (currentSpread <= 0) return;
+  currentSpread--; renderSpread(currentSpread);
+}
+
+document.getElementById('nextBtn').onclick = flipNext;
+document.getElementById('prevBtn').onclick = flipPrev;
+document.getElementById('bookScene').onclick = (e) => {
+  if (e.target.closest('.cal-btn') || e.target.closest('.send-btn') || e.target.closest('.locate-btn') || e.target.closest('input')) return;
+  const rect = e.currentTarget.getBoundingClientRect();
+  (e.clientX - rect.left > rect.width / 2) ? flipNext() : flipPrev();
+};
+
+renderSpread(0);
+
+(function(){
+  const c = document.getElementById('particles'), ctx = c.getContext('2d');
+  let W, H, pts = [];
+  function res() { W = c.width = window.innerWidth; H = c.height = window.innerHeight; }
+  res(); window.onresize = res;
+  for(let i=0;i<50;i++) pts.push({x:Math.random()*W, y:Math.random()*H, r:Math.random()*1.5, vy:-Math.random()*0.5});
+  function drw() {
+    ctx.clearRect(0,0,W,H);
+    pts.forEach(p => {
+      p.y += p.vy; if(p.y < 0) p.y = H;
+      ctx.fillStyle = "rgba(212,175,55,0.3)";
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 7); ctx.fill();
+    });
+    requestAnimationFrame(drw);
+  }
+  drw();
+})();
+</script>
+</body>
+</html>
