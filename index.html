@@ -59,7 +59,7 @@ body{
 
 .card{
     width:100%;
-    max-width:620px;
+    max-width:680px;
 
     background:var(--card);
 
@@ -133,6 +133,10 @@ h1{
     text-align:left;
 }
 
+.notice + .notice{
+    margin-top:18px;
+}
+
 .notice-title{
     color:#60a5fa;
 
@@ -163,6 +167,8 @@ h1{
     justify-content:flex-start;
 
     gap:12px;
+
+    flex-wrap:wrap;
 }
 
 .dev-badge{
@@ -238,6 +244,8 @@ h1{
         We will be back soon.
     </p>
 
+    <!-- UPDATE 1 -->
+
     <div class="notice">
 
         <div class="notice-title">
@@ -257,6 +265,36 @@ h1{
 
             <div class="dev-role">
                 Lead Developer
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- UPDATE 2 -->
+
+    <div class="notice">
+
+        <div class="notice-title">
+            SECURITY UPDATE
+        </div>
+
+        <div class="notice-text">
+            Routing issues have now been cleared successfully.
+            We are currently performing additional security checks and verification before migration.
+            <br><br>
+            The website will migrate back online as soon as possible.
+            Sorry for the inconvenience.
+        </div>
+
+        <div class="dev">
+
+            <div class="dev-badge">
+                Mishal
+            </div>
+
+            <div class="dev-role">
+                Security Analyst
             </div>
 
         </div>
